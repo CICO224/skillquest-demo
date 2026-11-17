@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Gift, PackageCheck, Plus, Trash2 } from 'lucide-react';
 import { Button, Card, EmptyState, Field, inputClass, Modal, Pill, PointsLabel, useToast } from '../components/ui';
+import { Collapse, useCelebrate, useLeaving } from '../components/motion';
 import { useStore } from '../lib/store';
 import { cx, formatDate, formatRelative } from '../lib/utils';
 import { PageHeader, SectionTitle } from './layout';
@@ -10,13 +11,15 @@ const EMOJIS = ['🎮', '🍕', '🎬', '📚', '🍦', '🛹', '🎨', '⚽', '
 export function DeliveryView() {
   const { state, markDelivered, deleteReward } = useStore();
   const toast = useToast();
+  const celebrate = useCelebrate();
+  const { isLeaving, leave } = useLeaving();
   const [addOpen, setAddOpen] = useState(false);
 
   const waiting = state.claims.filter((c) => !c.isDelivered);
   const delivered = state.claims.filter((c) => c.isDelivered).slice(0, 6);
 
   return (
-    <div className="animate-fade">
+    <div>
       <PageHeader title="Reward Delivery" subtitle={`Rewards ${state.teen.name} has claimed. Hand them over in real life, then mark them delivered.`} />
 
       <SectionTitle>Waiting to be handed over</SectionTitle>
@@ -26,9 +29,10 @@ export function DeliveryView() {
         </Card>
       ) : (
         <Card className="overflow-hidden">
-          <ul className="divide-y divide-black/5">
+          <ul className="divide-y divide-separator">
             {waiting.map((c) => (
-              <li key={c.id} className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center">
+              <Collapse as="li" key={c.id} leaving={isLeaving(c.id)}>
+              <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center">
                 <div className="flex flex-1 items-center gap-4">
                   <span className="flex size-12 items-center justify-center rounded-2xl bg-canvas text-[26px]" aria-hidden>
                     {c.rewardIcon}
@@ -44,13 +48,14 @@ export function DeliveryView() {
                   variant="success"
                   size="lg"
                   onClick={() => {
-                    markDelivered(c.id);
-                    toast('Marked as delivered');
+                    leave(c.id, () => markDelivered(c.id));
+                    celebrate({ title: 'Delivered', subtitle: `${c.rewardTitle} handed over` });
                   }}
                 >
                   <PackageCheck className="size-5" aria-hidden /> Mark Delivered
                 </Button>
-              </li>
+              </div>
+              </Collapse>
             ))}
           </ul>
         </Card>
@@ -97,7 +102,7 @@ export function DeliveryView() {
         <>
           <SectionTitle>Already handed over</SectionTitle>
           <Card className="overflow-hidden">
-            <ul className="divide-y divide-black/5">
+            <ul className="divide-y divide-separator">
               {delivered.map((c) => (
                 <li key={c.id} className="flex items-center gap-4 px-5 py-4">
                   <span className="text-[22px]" aria-hidden>
@@ -192,7 +197,7 @@ function AddRewardModal({ open, onClose }: { open: boolean; onClose: () => void 
                 className={cx(
                   'flex aspect-square items-center justify-center rounded-2xl text-[26px] transition',
                   'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30',
-                  icon === e ? 'bg-accent/10 ring-2 ring-accent' : 'bg-canvas hover:bg-black/[0.06]',
+                  icon === e ? 'bg-accent/10 ring-2 ring-accent' : 'bg-canvas hover:bg-fill',
                 )}
               >
                 {e}

@@ -30,7 +30,7 @@ export function QrModal({ open, onClose }: { open: boolean; onClose: () => void 
                 connectKid();
                 setConnected(true);
               }}
-              className="rounded-[28px] bg-white p-5 shadow-card ring-1 ring-black/5 transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
+              className="rounded-[28px] bg-surface p-5 shadow-card ring-1 ring-separator transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
               aria-label="Family QR code. Demo: click to simulate your teen scanning it"
             >
               <DemoQr seed={state.parentName} />

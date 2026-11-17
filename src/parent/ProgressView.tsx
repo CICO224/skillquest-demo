@@ -1,6 +1,7 @@
 import { CheckCircle2, Gift, Sparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Card, EmptyState, StarIcon } from '../components/ui';
+import { AnimatedNumber } from '../components/motion';
 import { CategoryIcon } from '../lib/categories';
 import { useStore } from '../lib/store';
 import { formatDate } from '../lib/utils';
@@ -15,7 +16,7 @@ export function ProgressView() {
     .slice(0, 6);
 
   return (
-    <div className="animate-fade">
+    <div>
       <PageHeader title="Teen Progress" subtitle={`How ${teen.name} is doing. Only their own progress, never compared to anyone else.`} />
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -29,7 +30,7 @@ export function ProgressView() {
         {recent.length === 0 ? (
           <EmptyState icon={<Sparkles className="size-7" />} title="No approvals yet" body="Approved quests will be listed here." />
         ) : (
-          <ul className="divide-y divide-black/5">
+          <ul className="divide-y divide-separator">
             {recent.map((q) => (
               <li key={q.id} className="flex items-center gap-4 px-5 py-4">
                 <CategoryIcon category={q.category} />
@@ -51,7 +52,9 @@ function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: n
       <div className="flex size-11 items-center justify-center rounded-full bg-canvas" aria-hidden>
         {icon}
       </div>
-      <p className="mt-5 text-[44px] leading-none font-semibold tracking-tight tabular-nums">{value}</p>
+      <p className="mt-5 text-[44px] leading-none font-semibold tracking-tight ">
+        <AnimatedNumber value={value} from={0} />
+      </p>
       <p className="mt-2 text-[15px] text-ink-2">{label}</p>
     </Card>
   );

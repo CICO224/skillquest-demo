@@ -21,9 +21,9 @@ const VARIANTS: Record<Variant, string> = {
   primary: 'bg-accent text-white hover:bg-accent-hover',
   success: 'bg-ok text-white hover:brightness-110',
   danger: 'bg-bad text-white hover:brightness-110',
-  secondary: 'bg-black/[0.06] text-ink hover:bg-black/10',
+  secondary: 'bg-fill text-ink hover:bg-fill-2',
   plain: 'text-accent hover:bg-accent/10',
-  dark: 'bg-ink text-white hover:bg-black',
+  dark: "bg-[#1d1d1f] text-white hover:bg-black dark:bg-raised",
 };
 
 const SIZES: Record<Size, string> = {
@@ -59,14 +59,14 @@ export function Button({ variant = 'primary', size = 'md', block, className, typ
 /* ---------- Card ---------- */
 
 export function Card({ className, children, as: Tag = 'div' }: { className?: string; children: ReactNode; as?: 'div' | 'section' | 'article' | 'li' }) {
-  return <Tag className={cx('rounded-3xl bg-white shadow-card', className)}>{children}</Tag>;
+  return <Tag className={cx('rounded-3xl bg-surface shadow-card', className)}>{children}</Tag>;
 }
 
 /* ---------- Pill / status label ---------- */
 
 type Tone = 'gray' | 'blue' | 'green' | 'red' | 'orange' | 'missed';
 const TONES: Record<Tone, string> = {
-  gray: 'bg-black/[0.06] text-ink-2',
+  gray: 'bg-fill text-ink-2',
   blue: 'bg-accent/10 text-accent',
   green: 'bg-ok-soft text-ok',
   red: 'bg-bad-soft text-bad',
@@ -76,7 +76,7 @@ const TONES: Record<Tone, string> = {
 
 export function Pill({ tone = 'gray', children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
   return (
-    <span className={cx('inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold leading-none', TONES[tone], className)}>
+    <span className={cx('inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[13px] font-semibold leading-none whitespace-nowrap', TONES[tone], className)}>
       {children}
     </span>
   );
@@ -102,7 +102,7 @@ export function Segmented<T extends string>({
   renderOption?: (v: T) => ReactNode;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex w-full rounded-xl bg-black/[0.06] p-1">
+    <div role="radiogroup" aria-label={label} className="flex w-full rounded-xl bg-fill p-1">
       {options.map((opt) => {
         const active = opt === value;
         return (
@@ -115,7 +115,7 @@ export function Segmented<T extends string>({
             className={cx(
               'flex h-10 flex-1 items-center justify-center gap-1.5 rounded-[9px] px-2 text-[14px] font-medium transition',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40',
-              active ? 'bg-white text-ink shadow-[0_1px_3px_rgba(0,0,0,0.12)]' : 'text-ink-2 hover:text-ink',
+              active ? 'bg-raised text-ink shadow-[0_1px_3px_rgba(0,0,0,0.12)]' : 'text-ink-2 hover:text-ink',
             )}
           >
             {renderOption ? renderOption(opt) : opt}
@@ -141,7 +141,7 @@ export function Field({ label, hint, htmlFor, children }: { label: string; hint?
 }
 
 export const inputClass =
-  'block w-full h-12 rounded-xl border border-hairline bg-white px-4 text-[16px] text-ink placeholder:text-ink-3 ' +
+  'block w-full h-12 rounded-xl border border-hairline bg-surface px-4 text-[16px] text-ink placeholder:text-ink-3 ' +
   'transition focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15';
 
 /* ---------- Modal (sheet on phones, dialog on desktop) ---------- */
@@ -196,7 +196,7 @@ export function Modal({
         aria-labelledby={titleId}
         tabIndex={-1}
         className={cx(
-          'relative flex max-h-[92dvh] w-full animate-pop flex-col overflow-hidden rounded-t-[28px] bg-white shadow-lift outline-none sm:rounded-[28px]',
+          'relative flex max-h-[92dvh] w-full animate-pop flex-col overflow-hidden rounded-t-[28px] bg-surface shadow-lift outline-none sm:rounded-[28px]',
           wide ? 'sm:max-w-2xl' : 'sm:max-w-lg',
         )}
       >
@@ -210,13 +210,13 @@ export function Modal({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-9 shrink-0 items-center gap-1 rounded-full bg-black/[0.06] px-3 text-[13px] font-medium text-ink-2 hover:bg-black/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
+            className="flex h-9 shrink-0 items-center gap-1 rounded-full bg-fill px-3 text-[13px] font-medium text-ink-2 hover:bg-fill-2 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
           >
             <X className="size-4" aria-hidden /> Close
           </button>
         </div>
         <div className="overflow-y-auto px-6 py-4">{children}</div>
-        {footer && <div className="flex flex-col-reverse gap-3 border-t border-black/5 px-6 py-4 sm:flex-row sm:justify-end">{footer}</div>}
+        {footer && <div className="flex flex-col-reverse gap-3 border-t border-separator px-6 py-4 sm:flex-row sm:justify-end">{footer}</div>}
       </div>
     </div>
   );
@@ -241,7 +241,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-24 z-[60] flex justify-center px-4 sm:bottom-8">
         {msg && (
-          <div key={msg.key} className="flex animate-pop items-center gap-2 rounded-full bg-ink/90 px-5 py-3 text-[15px] font-medium text-white shadow-lift backdrop-blur">
+          <div key={msg.key} className="flex animate-pop items-center gap-2 rounded-full bg-[#1d1d1f]/90 dark:bg-[#3a3a3c]/90 px-5 py-3 text-[15px] font-medium text-white shadow-lift backdrop-blur">
             <CheckCircle2 className="size-5 text-[#30d158]" aria-hidden />
             {msg.text}
           </div>
@@ -280,7 +280,7 @@ export function PointsLabel({ points, className }: { points: number; className?:
 export function EmptyState({ icon, title, body }: { icon: ReactNode; title: string; body: string }) {
   return (
     <div className="flex flex-col items-center px-6 py-14 text-center">
-      <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-black/[0.05] text-ink-3">{icon}</div>
+      <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-fill text-ink-3">{icon}</div>
       <p className="text-[17px] font-semibold text-ink">{title}</p>
       <p className="mt-1 max-w-sm text-[15px] text-ink-2">{body}</p>
     </div>

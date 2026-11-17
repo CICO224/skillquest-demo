@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Check, ImageOff, Inbox, X } from 'lucide-react';
 import { Button, Card, EmptyState, Field, MissedBadge, Modal, Pill, useToast } from '../components/ui';
+import { Collapse, useCelebrate, useLeaving } from '../components/motion';
 import { CategoryIcon } from '../lib/categories';
 import { useStore } from '../lib/store';
 import type { Quest } from '../types';
@@ -11,14 +12,15 @@ const QUICK_REASONS = ['The photo is too blurry', 'It isn’t finished yet', 'Wr
 
 export function ReviewView() {
   const { state, approveQuest } = useStore();
-  const toast = useToast();
+  const celebrate = useCelebrate();
+  const { isLeaving, leave } = useLeaving();
   const [rejecting, setRejecting] = useState<Quest | null>(null);
   const [zoom, setZoom] = useState<Quest | null>(null);
 
   const pending = state.quests.filter((q) => q.status === 'pending_review');
 
   return (
-    <div className="animate-fade">
+    <div>
       <PageHeader title="Review Proofs" subtitle={`Look at each photo ${state.teen.name} sent, then approve or reject it.`} />
 
       {pending.length === 0 ? (
@@ -30,11 +32,12 @@ export function ReviewView() {
           {pending.map((q) => {
             const missed = isMissed(q);
             return (
-              <Card as="article" key={q.id} className="overflow-hidden lg:flex">
+              <Collapse key={q.id} leaving={isLeaving(q.id)}>
+              <Card as="article" className="overflow-hidden lg:flex">
                 <button
                   type="button"
                   onClick={() => q.submittedPhotoUrl && setZoom(q)}
-                  className="group relative block aspect-[4/3] w-full shrink-0 bg-black/5 lg:w-[420px]"
+                  className="group relative block aspect-[4/3] w-full shrink-0 bg-fill lg:w-[420px]"
                   aria-label={`Open the photo for ${q.title} larger`}
                 >
                   {q.submittedPhotoUrl ? (
@@ -81,8 +84,8 @@ export function ReviewView() {
                       size="lg"
                       className="flex-1"
                       onClick={() => {
-                        approveQuest(q.id);
-                        toast(`Approved · ${q.points} points added for ${state.teen.name}`);
+                        leave(q.id, () => approveQuest(q.id));
+                        celebrate({ title: 'Approved', subtitle: `+${q.points} points for ${state.teen.name}` });
                       }}
                     >
                       <Check className="size-5" aria-hidden /> Approve (+{q.points} pts)
@@ -93,12 +96,13 @@ export function ReviewView() {
                   </div>
                 </div>
               </Card>
+              </Collapse>
             );
           })}
         </div>
       )}
 
-      <RejectModal quest={rejecting} onClose={() => setRejecting(null)} />
+      <RejectModal quest={rejecting} onClose={() => setRejecting(null)} commit={leave} />
 
       <Modal open={!!zoom} onClose={() => setZoom(null)} title={zoom?.title ?? ''} wide>
         {zoom?.submittedPhotoUrl && <img src={zoom.submittedPhotoUrl} alt={`Proof photo for ${zoom.title}`} className="w-full rounded-2xl" />}
@@ -107,7 +111,7 @@ export function ReviewView() {
   );
 }
 
-function RejectModal({ quest, onClose }: { quest: Quest | null; onClose: () => void }) {
+function RejectModal({ quest, onClose, commit }: { quest: Quest | null; onClose: () => void; commit: (id: string, fn: () => void) => void }) {
   const { rejectQuest, state } = useStore();
   const toast = useToast();
   const [reason, setReason] = useState('');
@@ -123,7 +127,9 @@ function RejectModal({ quest, onClose }: { quest: Quest | null; onClose: () => v
   const submit = () => {
     setTouched(true);
     if (!quest || empty) return;
-    rejectQuest(quest.id, reason);
+    const id = quest.id;
+    const text = reason;
+    commit(id, () => rejectQuest(id, text));
     toast(`Sent back to ${state.teen.name} with your reason`);
     close();
   };
@@ -157,7 +163,7 @@ function RejectModal({ quest, onClose }: { quest: Quest | null; onClose: () => v
             placeholder="e.g. The bed isn’t made yet, please try again."
             aria-invalid={touched && empty}
             className={cx(
-              'block w-full resize-none rounded-xl border bg-white px-4 py-3 text-[16px] transition focus:outline-none focus:ring-4',
+              'block w-full resize-none rounded-xl border bg-surface px-4 py-3 text-[16px] transition focus:outline-none focus:ring-4',
               touched && empty ? 'border-bad focus:ring-bad/15' : 'border-hairline focus:border-accent focus:ring-accent/15',
             )}
             autoFocus
@@ -174,7 +180,7 @@ function RejectModal({ quest, onClose }: { quest: Quest | null; onClose: () => v
                 onClick={() => setReason(r)}
                 className="rounded-full focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
               >
-                <Pill tone="gray" className="px-3.5 py-2 text-[14px] font-medium hover:bg-black/10">
+                <Pill tone="gray" className="px-3.5 py-2 text-[14px] font-medium hover:bg-fill-2">
                   {r}
                 </Pill>
               </button>

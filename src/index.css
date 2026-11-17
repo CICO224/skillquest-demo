@@ -8,6 +8,11 @@
   --color-ink-2: #6e6e73;
   --color-ink-3: #86868b;
   --color-canvas: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-raised: #ffffff;
+  --color-fill: rgb(0 0 0 / 0.06);
+  --color-fill-2: rgb(0 0 0 / 0.1);
+  --color-separator: rgb(0 0 0 / 0.06);
   --color-hairline: #d2d2d7;
   --color-accent: #0071e3;
   --color-accent-hover: #0077ed;
@@ -25,6 +30,8 @@
   --animate-pop: pop 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   --animate-fade: fade 0.2s ease-out;
   --animate-rise: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-enter: enter 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-bump: bump 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
 
   @keyframes pop {
     from { opacity: 0; transform: scale(0.96) translateY(8px); }
@@ -38,6 +45,45 @@
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: none; }
   }
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes bump {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* Dark mode follows the device setting */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-ink: #f5f5f7;
+    --color-ink-2: #a1a1a6;
+    --color-ink-3: #8e8e93;
+    --color-canvas: #000000;
+    --color-surface: #1c1c1e;
+    --color-raised: #3a3a3c;
+    --color-fill: rgb(255 255 255 / 0.1);
+    --color-fill-2: rgb(255 255 255 / 0.16);
+    --color-separator: rgb(255 255 255 / 0.1);
+    --color-hairline: #3a3a3c;
+    --color-accent: #0a84ff;
+    --color-accent-hover: #409cff;
+    --color-ok: #2fa84f;
+    --color-ok-soft: rgb(48 209 88 / 0.16);
+    --color-bad: #ff453a;
+    --color-bad-soft: rgb(255 69 58 / 0.18);
+    --color-warn: #ff9f0a;
+    --color-warn-soft: rgb(255 159 10 / 0.16);
+    --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.05);
+    --shadow-lift: 0 0 0 1px rgb(255 255 255 / 0.08), 0 24px 64px rgb(0 0 0 / 0.6);
+  }
+}
+
+:root {
+  color-scheme: light dark;
 }
 
 html {
@@ -58,10 +104,39 @@ body {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
 }
+@media (prefers-color-scheme: dark) {
+  .glass { background: rgb(28 28 30 / 0.72); }
+}
+
+/* Celebration: confetti and a self-drawing checkmark */
+.confetti-piece {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 14px;
+  border-radius: 3px;
+  opacity: 0;
+  animation: confetti 1.3s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
+}
+@keyframes confetti {
+  0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) scale(0.6); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(1); }
+}
+.check-draw {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw 0.45s 0.18s ease-out forwards;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }

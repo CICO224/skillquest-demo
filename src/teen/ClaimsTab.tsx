@@ -9,7 +9,7 @@ export function ClaimsTab({ onShop }: { onShop: () => void }) {
   const claims = [...state.claims].sort((a, b) => Number(a.isDelivered) - Number(b.isDelivered) || b.claimedAt.localeCompare(a.claimedAt));
 
   return (
-    <div className="animate-fade">
+    <div>
       <LargeTitle subtitle="Rewards you claimed and whether you got them yet.">My Claims</LargeTitle>
 
       {claims.length === 0 ? (

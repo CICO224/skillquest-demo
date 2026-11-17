@@ -3,10 +3,10 @@ import type { Category } from '../types';
 import { cx } from './utils';
 
 export const CATEGORY_META: Record<Category, { icon: LucideIcon; text: string; bg: string }> = {
-  Chores: { icon: House, text: 'text-orange-600', bg: 'bg-orange-100' },
-  Study: { icon: BookOpen, text: 'text-indigo-600', bg: 'bg-indigo-100' },
-  Health: { icon: HeartPulse, text: 'text-teal-700', bg: 'bg-teal-100' },
-  Responsibility: { icon: ShieldCheck, text: 'text-purple-600', bg: 'bg-purple-100' },
+  Chores: { icon: House, text: 'text-orange-600 dark:text-orange-300', bg: 'bg-orange-100 dark:bg-orange-500/20' },
+  Study: { icon: BookOpen, text: 'text-indigo-600 dark:text-indigo-300', bg: 'bg-indigo-100 dark:bg-indigo-500/20' },
+  Health: { icon: HeartPulse, text: 'text-teal-700 dark:text-teal-300', bg: 'bg-teal-100 dark:bg-teal-500/20' },
+  Responsibility: { icon: ShieldCheck, text: 'text-purple-600 dark:text-purple-300', bg: 'bg-purple-100 dark:bg-purple-500/20' },
 };
 
 export function CategoryIcon({ category, size = 'md' }: { category: Category; size?: 'md' | 'lg' }) {

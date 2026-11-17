@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { Gift, Lock } from 'lucide-react';
-import { Button, Card, EmptyState, Modal, PointsLabel, useToast } from '../components/ui';
+import { Button, Card, EmptyState, Modal, PointsLabel } from '../components/ui';
+import { useCelebrate } from '../components/motion';
 import { useStore } from '../lib/store';
 import type { Reward } from '../types';
 import { LargeTitle } from './layout';
 
 export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
   const { state, claimReward } = useStore();
-  const toast = useToast();
+  const celebrate = useCelebrate();
   const [confirm, setConfirm] = useState<Reward | null>(null);
   const points = state.teen.points;
   const rewards = [...state.rewards].sort((a, b) => a.cost - b.cost);
 
   return (
-    <div className="animate-fade">
+    <div>
       <LargeTitle subtitle="Spend your points on rewards from your family.">Reward Shop</LargeTitle>
 
       {rewards.length === 0 ? (
@@ -36,10 +37,10 @@ export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
                 <div className="mt-auto pt-3">
                   {locked ? (
                     <div>
-                      <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-black/[0.06]" aria-hidden>
+                      <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-fill" aria-hidden>
                         <div className="h-full rounded-full bg-star" style={{ width: `${progress}%` }} />
                       </div>
-                      <p className="flex items-start gap-1.5 rounded-xl bg-black/[0.05] px-2.5 py-2 text-[13px] leading-snug font-semibold text-ink-2">
+                      <p className="flex items-start gap-1.5 rounded-xl bg-fill px-2.5 py-2 text-[13px] leading-snug font-semibold text-ink-2">
                         <Lock className="mt-px size-4 shrink-0" aria-hidden />
                         Locked — Need {missing} more {missing === 1 ? 'point' : 'points'}
                       </p>
@@ -70,9 +71,15 @@ export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
               size="lg"
               onClick={() => {
                 if (confirm && claimReward(confirm.id)) {
-                  toast('Claimed! Your parent will hand it over.');
+                  const claimed = confirm;
                   setConfirm(null);
                   onClaimed();
+                  celebrate({
+                    title: 'Claimed!',
+                    subtitle: `Your parent will hand over “${claimed.title}” in real life.`,
+                    emoji: claimed.icon,
+                    confetti: true,
+                  });
                 }
               }}
             >

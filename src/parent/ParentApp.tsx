@@ -11,7 +11,7 @@ import { DeliveryView } from './DeliveryView';
 import { ProgressView } from './ProgressView';
 import { PlanModal, QrModal } from './FamilyModals';
 
-type Section = 'quests' | 'review' | 'delivery' | 'progress';
+export type Section = 'quests' | 'review' | 'delivery' | 'progress';
 
 export function ParentApp() {
   const { state, slotsUsed, slotLimit, resetDemo } = useStore();
@@ -37,17 +37,17 @@ export function ParentApp() {
   return (
     <div className="min-h-dvh bg-canvas">
       {/* Header & Family Bar */}
-      <header className="glass sticky top-0 z-40 border-b border-black/5">
+      <header className="glass sticky top-0 z-40 border-b border-separator">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-4 px-4 sm:px-6">
           <a href={hrefFor('home')} aria-label="SKILLQuest home">
             <Logo />
           </a>
-          <span className="hidden rounded-full bg-black/[0.06] px-2.5 py-1 text-[12px] font-semibold text-ink-2 md:inline">Parent</span>
+          <span className="hidden rounded-full bg-fill px-2.5 py-1 text-[12px] font-semibold text-ink-2 md:inline">Parent</span>
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={() => setPlanOpen(true)}
-              className="flex h-10 items-center gap-2 rounded-full bg-white px-4 text-[14px] shadow-card transition hover:bg-white/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
+              className="flex h-10 items-center gap-2 rounded-full bg-surface px-4 text-[14px] shadow-card transition hover:bg-surface/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
             >
               <span className="font-semibold">{state.plan === 'free' ? 'Free Plan' : 'Premium Plan'}</span>
               <span className="text-ink-3" aria-hidden>·</span>
@@ -66,7 +66,7 @@ export function ParentApp() {
             <button
               type="button"
               onClick={() => setQrOpen(true)}
-              className="group flex items-center gap-2 rounded-full py-1 pr-3 pl-1 transition hover:bg-black/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
+              className="group flex items-center gap-2 rounded-full py-1 pr-3 pl-1 transition hover:bg-fill focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
               aria-label={`${state.parentName}. Show QR code to connect your teen`}
             >
               <span className="flex size-9 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-indigo-600 text-[14px] font-semibold text-white">
@@ -97,7 +97,7 @@ export function ParentApp() {
                       className={cx(
                         'flex h-12 w-full items-center gap-3 rounded-2xl px-4 text-left text-[15px] font-medium transition',
                         'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30',
-                        active ? 'bg-accent text-white shadow-card' : 'text-ink hover:bg-black/5',
+                        active ? 'bg-accent text-white shadow-card' : 'text-ink hover:bg-fill',
                       )}
                     >
                       <span className={active ? 'text-white' : 'text-ink-2'} aria-hidden>
@@ -133,8 +133,8 @@ export function ParentApp() {
         </aside>
 
         {/* Main */}
-        <main className="min-w-0 flex-1">
-          {section === 'quests' && <QuestsView onUpgrade={() => setPlanOpen(true)} />}
+        <main key={section} className="min-w-0 flex-1 animate-enter">
+          {section === 'quests' && <QuestsView onUpgrade={() => setPlanOpen(true)} onNavigate={setSection} />}
           {section === 'review' && <ReviewView />}
           {section === 'delivery' && <DeliveryView />}
           {section === 'progress' && <ProgressView />}

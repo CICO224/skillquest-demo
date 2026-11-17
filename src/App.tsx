@@ -1,6 +1,7 @@
 import { StoreProvider } from './lib/store';
 import { useRoute } from './lib/router';
 import { ToastProvider } from './components/ui';
+import { CelebrationProvider } from './components/motion';
 import { Landing } from './Landing';
 import { ParentApp } from './parent/ParentApp';
 import { TeenApp } from './teen/TeenApp';
@@ -10,7 +11,9 @@ export function App() {
   return (
     <StoreProvider>
       <ToastProvider>
-        {route === 'parent' ? <ParentApp /> : route === 'teen' ? <TeenApp /> : <Landing />}
+        <CelebrationProvider>
+          {route === 'parent' ? <ParentApp /> : route === 'teen' ? <TeenApp /> : <Landing />}
+        </CelebrationProvider>
       </ToastProvider>
     </StoreProvider>
   );

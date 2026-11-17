@@ -1,7 +1,8 @@
 import { Camera, Check, ChevronRight, Gift, HandHeart, ListChecks, Monitor, ShieldCheck, Smartphone } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Logo } from './components/Logo';
 import { StarIcon } from './components/ui';
+import { prefersReducedMotion, Reveal } from './components/motion';
 import { hrefFor } from './lib/router';
 import { cx } from './lib/utils';
 
@@ -15,9 +16,9 @@ const STEPS: { icon: ReactNode; title: string; body: string; tint: string }[] = 
 
 export function Landing() {
   return (
-    <div className="min-h-dvh bg-white">
+    <div className="min-h-dvh bg-surface">
       {/* Nav */}
-      <header className="glass sticky top-0 z-40 border-b border-black/5">
+      <header className="glass sticky top-0 z-40 border-b border-separator">
         <nav className="mx-auto flex h-12 max-w-[1024px] items-center justify-between px-4 sm:px-6">
           <a href={hrefFor('home')} aria-label="SKILLQuest home">
             <Logo />
@@ -62,28 +63,40 @@ export function Landing() {
       {/* Promise */}
       <section className="px-4 py-20 text-center">
         <h2 className="mx-auto max-w-3xl text-[32px] leading-tight font-semibold tracking-tight sm:text-[48px]">
-          One currency. <span className="text-ink-3">Points.</span>
-          <br />
-          No levels. No badges. <span className="text-ink-3">No leaderboards.</span>
+          <Reveal>
+            <span className="whitespace-nowrap">One currency.</span>{' '}
+            <span className="whitespace-nowrap text-ink-3">Points.</span>
+            <br />
+            <span className="whitespace-nowrap">No levels.</span> <span className="whitespace-nowrap">No badges.</span>{' '}
+            <span className="whitespace-nowrap text-ink-3">No leaderboards.</span>
+          </Reveal>
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-[19px] text-ink-2">
-          SKILLQuest only ever shows your teen their own progress. No rankings, no comparing with anyone else.
-        </p>
+        <Reveal delay={120}>
+          <p className="mx-auto mt-5 max-w-xl text-[19px] text-ink-2">
+            SKILLQuest only ever shows your teen their own progress. No rankings, no comparing with anyone else.
+          </p>
+        </Reveal>
       </section>
 
       {/* How it works */}
       <section id="how" className="scroll-mt-14 bg-canvas px-4 py-20">
         <div className="mx-auto max-w-[1024px]">
-          <h2 className="text-center text-[32px] font-semibold tracking-tight sm:text-[48px]">How it works.</h2>
+          <Reveal>
+            <h2 className="text-center text-[32px] font-semibold tracking-tight sm:text-[48px]">How it works.</h2>
+          </Reveal>
           <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {STEPS.map((s, i) => (
-              <li key={s.title} className="rounded-3xl bg-white p-6 shadow-card">
+              <li key={s.title}>
+                <Reveal delay={i * 90} className="h-full">
+                <div className="h-full rounded-3xl bg-surface p-6 shadow-card">
                 <div className={cx('flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br text-white', s.tint)} aria-hidden>
                   {s.icon}
                 </div>
                 <p className="mt-5 text-[13px] font-semibold text-ink-3">Step {i + 1}</p>
                 <h3 className="mt-1 text-[19px] leading-snug font-semibold tracking-tight">{s.title}</h3>
                 <p className="mt-2 text-[15px] leading-relaxed text-ink-2">{s.body}</p>
+                </div>
+                </Reveal>
               </li>
             ))}
           </ol>
@@ -93,7 +106,8 @@ export function Landing() {
       {/* Two experiences */}
       <section className="px-4 py-20">
         <div className="mx-auto grid max-w-[1024px] gap-4 md:grid-cols-2">
-          <a href={hrefFor('parent')} className="group rounded-[32px] bg-ink p-10 text-white transition hover:scale-[1.01]">
+          <Reveal>
+          <a href={hrefFor('parent')} className="group block h-full rounded-[32px] bg-[#1d1d1f] p-10 text-white transition hover:scale-[1.01] dark:bg-surface dark:ring-1 dark:ring-separator">
             <Monitor className="size-8 text-white/70" aria-hidden />
             <h3 className="mt-6 text-[32px] leading-tight font-semibold tracking-tight">For Parents.</h3>
             <p className="mt-3 text-[17px] text-white/70">
@@ -103,7 +117,9 @@ export function Landing() {
               Open Parent Dashboard <ChevronRight className="size-4" aria-hidden />
             </span>
           </a>
-          <a href={hrefFor('teen')} className="group rounded-[32px] bg-gradient-to-br from-[#fff4e5] to-[#ffe3ec] p-10 transition hover:scale-[1.01]">
+          </Reveal>
+          <Reveal delay={120}>
+          <a href={hrefFor('teen')} className="group block h-full rounded-[32px] bg-gradient-to-br from-[#fff4e5] to-[#ffe3ec] p-10 transition hover:scale-[1.01] dark:from-orange-500/15 dark:to-pink-500/15">
             <Smartphone className="size-8 text-orange-500" aria-hidden />
             <h3 className="mt-6 text-[32px] leading-tight font-semibold tracking-tight">For Teens, 8–15.</h3>
             <p className="mt-3 text-[17px] text-ink-2">
@@ -113,13 +129,17 @@ export function Landing() {
               Open Teen View <ChevronRight className="size-4" aria-hidden />
             </span>
           </a>
+          </Reveal>
         </div>
       </section>
 
       {/* Pricing */}
       <section id="pricing" className="scroll-mt-14 bg-canvas px-4 py-20">
         <div className="mx-auto max-w-[880px]">
-          <h2 className="text-center text-[32px] font-semibold tracking-tight sm:text-[48px]">Simple plans.</h2>
+          <Reveal>
+            <h2 className="text-center text-[32px] font-semibold tracking-tight sm:text-[48px]">Simple plans.</h2>
+          </Reveal>
+          <Reveal delay={120}>
           <div className="mt-12 grid gap-4 md:grid-cols-2">
             <PlanCard
               name="Free"
@@ -135,11 +155,12 @@ export function Landing() {
               features={['Up to 5 Parents', 'Up to 10 Teens', '20 active quest slots', 'Reward Shop', 'Photo proof kept for 1 month']}
             />
           </div>
+          </Reveal>
           <p className="mt-6 text-center text-[13px] text-ink-3">Pricing shown is a placeholder for this prototype.</p>
         </div>
       </section>
 
-      <footer className="border-t border-black/5 px-4 py-10 text-center text-[12px] text-ink-3">
+      <footer className="border-t border-separator px-4 py-10 text-center text-[12px] text-ink-3">
         <p>
           SKILLQuest is a web app. No downloads, works in any browser. Rewards are chosen and given by parents; SKILLQuest never ships physical items.
         </p>
@@ -150,7 +171,7 @@ export function Landing() {
 
 function PlanCard({ name, price, period, features, highlight }: { name: string; price: string; period: string; features: string[]; highlight?: boolean }) {
   return (
-    <div className={cx('rounded-[28px] bg-white p-8 shadow-card', highlight && 'ring-2 ring-accent')}>
+    <div className={cx('rounded-[28px] bg-surface p-8 shadow-card', highlight && 'ring-2 ring-accent')}>
       <div className="flex items-center justify-between">
         <h3 className="text-[24px] font-semibold tracking-tight">{name}</h3>
         {highlight && <span className="rounded-full bg-accent/10 px-3 py-1 text-[12px] font-semibold text-accent">For bigger families</span>}
@@ -170,18 +191,43 @@ function PlanCard({ name, price, period, features, highlight }: { name: string; 
 
 /** A laptop + phone mockup drawn in HTML to preview both experiences. */
 function HeroDevices() {
+  const laptopRef = useRef<HTMLDivElement>(null);
+  const phoneRef = useRef<HTMLDivElement>(null);
+
+  // Gentle parallax: the laptop settles and the phone floats up as you scroll.
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const p = Math.min(1, window.scrollY / 700);
+      if (laptopRef.current) laptopRef.current.style.transform = `translateY(${p * -24}px) scale(${1 + p * 0.03})`;
+      if (phoneRef.current) phoneRef.current.style.transform = `translateY(${p * -90}px) rotate(${p * -3}deg)`;
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
     <div className="relative mx-auto mt-16 max-w-[900px] animate-rise [animation-delay:260ms]" aria-hidden>
+      <div ref={laptopRef} className="will-change-transform">
       {/* Laptop */}
       <div className="mx-auto w-[88%] rounded-t-[22px] border-[10px] border-b-0 border-[#1d1d1f] bg-[#1d1d1f] shadow-lift">
         <div className="overflow-hidden rounded-t-[12px] bg-canvas text-left">
-          <div className="flex h-7 items-center gap-1.5 bg-white/80 px-3">
+          <div className="flex h-7 items-center gap-1.5 bg-surface/80 px-3">
             <span className="size-2.5 rounded-full bg-[#ff5f57]" />
             <span className="size-2.5 rounded-full bg-[#febc2e]" />
             <span className="size-2.5 rounded-full bg-[#28c840]" />
           </div>
           <div className="flex gap-3 p-3 sm:gap-4 sm:p-5">
-            <div className="hidden w-36 shrink-0 space-y-1.5 rounded-2xl bg-white/70 p-3 sm:block">
+            <div className="hidden w-36 shrink-0 space-y-1.5 rounded-2xl bg-surface/70 p-3 sm:block">
               {['Quests', 'Review Proofs', 'Reward Delivery', 'Teen Progress'].map((t, i) => (
                 <div key={t} className={cx('rounded-lg px-2 py-1.5 text-[11px] font-medium', i === 1 ? 'bg-accent text-white' : 'text-ink-2')}>
                   {t}
@@ -190,7 +236,7 @@ function HeroDevices() {
             </div>
             <div className="flex-1 space-y-3">
               <div className="text-[15px] font-semibold sm:text-[18px]">Review Proofs</div>
-              <div className="flex gap-3 rounded-2xl bg-white p-3 shadow-card">
+              <div className="flex gap-3 rounded-2xl bg-surface p-3 shadow-card">
                 <div className="aspect-[4/3] w-24 shrink-0 rounded-xl bg-gradient-to-br from-sky-200 to-violet-200 sm:w-36" />
                 <div className="flex flex-1 flex-col justify-between">
                   <div>
@@ -203,7 +249,7 @@ function HeroDevices() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 rounded-2xl bg-white p-3 shadow-card">
+              <div className="flex items-center gap-2 rounded-2xl bg-surface p-3 shadow-card">
                 <div className="text-[12px] font-bold text-bad sm:text-[14px]">Read for 20 minutes</div>
                 <span className="rounded-full bg-bad px-2 py-0.5 text-[9px] font-bold text-white uppercase">Missed</span>
               </div>
@@ -212,9 +258,10 @@ function HeroDevices() {
         </div>
       </div>
       <div className="mx-auto h-3 w-full rounded-b-[14px] bg-gradient-to-b from-[#d2d2d7] to-[#a1a1a6]" />
+      </div>
 
       {/* Phone */}
-      <div className="absolute -right-1 -bottom-6 w-[30%] max-w-[210px] rounded-[34px] border-[7px] border-[#1d1d1f] bg-[#1d1d1f] shadow-lift sm:right-2">
+      <div ref={phoneRef} className="absolute -right-1 -bottom-6 w-[30%] max-w-[210px] rounded-[34px] border-[7px] border-[#1d1d1f] bg-[#1d1d1f] shadow-lift will-change-transform sm:right-2">
         <div className="overflow-hidden rounded-[27px] bg-canvas p-2.5 text-left sm:p-3">
           <div className="mx-auto mb-2 h-3.5 w-14 rounded-full bg-[#1d1d1f]" />
           <div className="text-[9px] font-medium text-ink-2 sm:text-[11px]">Hi, Sam</div>
@@ -223,11 +270,11 @@ function HeroDevices() {
             <span className="text-[10px] font-semibold text-ink-2 sm:text-[12px]">Points</span>
           </div>
           <div className="mt-2 space-y-1.5">
-            <div className="rounded-xl bg-white p-2 shadow-card">
+            <div className="rounded-xl bg-surface p-2 shadow-card">
               <div className="text-[9px] font-semibold sm:text-[11px]">Make your bed</div>
               <div className="mt-1.5 rounded-full bg-accent py-1 text-center text-[8px] font-medium text-white sm:text-[10px]">Submit Photo Proof</div>
             </div>
-            <div className="rounded-xl bg-white p-2 shadow-card">
+            <div className="rounded-xl bg-surface p-2 shadow-card">
               <div className="text-[9px] font-semibold sm:text-[11px]">🎬 Movie night pick</div>
               <div className="mt-1 text-[8px] font-medium text-ink-2 sm:text-[10px]">🔒 Locked — Need 15 more points</div>
             </div>
