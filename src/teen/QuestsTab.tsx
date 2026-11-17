@@ -7,7 +7,7 @@ import { StatusPill } from '../lib/status';
 import { useStore } from '../lib/store';
 import { CATEGORIES, type Quest } from '../types';
 import { compressImage, cx, formatDate, formatDue, formatRelative, isMissed } from '../lib/utils';
-import { LargeTitle } from './layout';
+import { GroupTitle, LargeTitle } from './layout';
 
 export function QuestsTab({ onShop }: { onShop: () => void }) {
   const { state, submitProof } = useStore();
@@ -58,7 +58,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
 
   return (
     <div>
-      <LargeTitle subtitle={todoCount ? `${todoCount} ${todoCount === 1 ? 'quest' : 'quests'} left to do` : 'Everything is sent. Nice work!'}>
+      <LargeTitle eyebrow="Quest board" subtitle={todoCount ? `${todoCount} ${todoCount === 1 ? 'quest' : 'quests'} left to do` : 'Everything is sent. Nice work!'}>
         Today’s Quests
       </LargeTitle>
 
@@ -77,7 +77,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
         if (!list.length) return null;
         return (
           <section key={cat} className="mb-6">
-            <h2 className="mb-2 px-1 text-[13px] font-semibold tracking-wide text-ink-2 uppercase">{cat}</h2>
+            <GroupTitle>{cat}</GroupTitle>
             <div className="space-y-3">
               {list.map((q) => (
                 <QuestCard key={q.id} quest={q} onPhoto={() => pickPhoto(q)} busy={busy && target?.id === q.id} />
@@ -89,7 +89,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
 
       {done.length > 0 && (
         <section className="mt-8">
-          <h2 className="mb-2 px-1 text-[13px] font-semibold tracking-wide text-ink-2 uppercase">Done</h2>
+          <GroupTitle>Done</GroupTitle>
           <Card className="overflow-hidden">
             <ul className="divide-y divide-separator">
               {done.map((q) => (
@@ -151,7 +151,7 @@ function GoalCard({ onShop }: { onShop: () => void }) {
     <button
       type="button"
       onClick={onShop}
-      className="mb-6 flex w-full items-center gap-4 rounded-3xl bg-gradient-to-br from-[#fff6e5] to-[#ffe9f0] p-4 text-left shadow-card transition active:scale-[0.99] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 dark:from-orange-500/15 dark:to-pink-500/15"
+      className="mb-6 flex w-full items-center gap-4 rounded-3xl bg-gradient-to-br from-[#fff3d6] to-[#ffe4cf] p-4 text-left shadow-card transition active:scale-[0.99] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 dark:from-sun/15 dark:to-tangerine/15"
     >
       <span className="relative flex size-16 shrink-0 items-center justify-center">
         <svg viewBox="0 0 64 64" className="absolute inset-0 size-full -rotate-90" aria-hidden>

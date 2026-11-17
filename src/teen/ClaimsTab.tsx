@@ -10,7 +10,7 @@ export function ClaimsTab({ onShop }: { onShop: () => void }) {
 
   return (
     <div>
-      <LargeTitle subtitle="Rewards you claimed and whether you got them yet.">My Claims</LargeTitle>
+      <LargeTitle eyebrow="Real-life rewards" subtitle="Rewards you claimed and whether you got them yet.">My Claims</LargeTitle>
 
       {claims.length === 0 ? (
         <Card>

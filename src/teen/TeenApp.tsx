@@ -4,6 +4,7 @@ import { AnimatedNumber, useCelebrate } from '../components/motion';
 import { useStore } from '../lib/store';
 import { hrefFor } from '../lib/router';
 import { cx } from '../lib/utils';
+import { ThemeToggle } from '../lib/theme';
 import { QuestsTab } from './QuestsTab';
 import { ShopTab } from './ShopTab';
 import { ClaimsTab } from './ClaimsTab';
@@ -62,14 +63,14 @@ export function TeenApp() {
 
   return (
     <div className="min-h-dvh bg-canvas">
-      <div className="mx-auto min-h-dvh max-w-md bg-canvas sm:border-x sm:border-separator">
+      <div className="bg-pattern mx-auto min-h-dvh max-w-md bg-canvas sm:border-x sm:border-separator">
         {/* Top Status Bar */}
         <header className="glass sticky top-0 z-30 border-b border-separator px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3">
           <div className="flex items-center gap-3">
             <a
               href={hrefFor('home')}
               aria-label="SKILLQuest home"
-              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-pink-500 text-[17px] font-semibold text-white shadow-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-tangerine to-sun text-[17px] font-semibold text-white shadow-sm focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30"
             >
               {state.teen.name.charAt(0)}
             </a>
@@ -77,6 +78,7 @@ export function TeenApp() {
               <p className="truncate text-[12px] font-semibold tracking-wide text-ink-3 uppercase">{today}</p>
               <p className="truncate text-[17px] font-semibold">Hi, {state.teen.name} 👋</p>
             </div>
+            <ThemeToggle />
             <div
               className="flex items-center gap-1.5 rounded-full bg-surface py-1.5 pr-3.5 pl-2.5 shadow-card"
               aria-label={`You have ${points} points`}

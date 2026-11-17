@@ -1,15 +1,15 @@
 import { cx } from '../lib/utils';
+import { Emblem } from './brand';
 
 export function Logo({ className, withText = true }: { className?: string; withText?: boolean }) {
   return (
-    <span className={cx('inline-flex items-center gap-2', className)}>
-      <span
-        aria-hidden
-        className="flex size-7 items-center justify-center rounded-[8px] bg-gradient-to-br from-emerald-500 to-emerald-700 text-[15px] font-bold text-white shadow-sm"
-      >
-        S
-      </span>
-      {withText && <span className="text-[17px] font-semibold tracking-tight text-ink">SKILLQuest</span>}
+    <span className={cx('inline-flex items-center gap-1.5', className)}>
+      <Emblem className="size-8" />
+      {withText && (
+        <span className="text-[18px] font-extrabold tracking-tight text-ink">
+          SKILL<span className="text-accent">Quest</span>
+        </span>
+      )}
     </span>
   );
 }

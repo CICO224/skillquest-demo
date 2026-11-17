@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { ArrowLeft, Gift, ImageUp, LineChart, ListChecks, RotateCcw, Smartphone } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { Button } from '../components/ui';
+import { ThemeToggle } from '../lib/theme';
 import { useStore } from '../lib/store';
 import { hrefFor } from '../lib/router';
 import { cx } from '../lib/utils';
@@ -35,7 +36,7 @@ export function ParentApp() {
   ];
 
   return (
-    <div className="min-h-dvh bg-canvas">
+    <div className="bg-pattern min-h-dvh bg-canvas">
       {/* Header & Family Bar */}
       <header className="glass sticky top-0 z-40 border-b border-separator">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center gap-4 px-4 sm:px-6">
@@ -44,6 +45,7 @@ export function ParentApp() {
           </a>
           <span className="hidden rounded-full bg-fill px-2.5 py-1 text-[12px] font-semibold text-ink-2 md:inline">Parent</span>
           <div className="ml-auto flex items-center gap-2 sm:gap-3">
+            <ThemeToggle withLabel />
             <button
               type="button"
               onClick={() => setPlanOpen(true)}

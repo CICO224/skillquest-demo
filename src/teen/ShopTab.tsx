@@ -15,7 +15,7 @@ export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
 
   return (
     <div>
-      <LargeTitle subtitle="Spend your points on rewards from your family.">Reward Shop</LargeTitle>
+      <LargeTitle eyebrow="Spend your points" subtitle="Spend your points on rewards from your family.">Reward Shop</LargeTitle>
 
       {rewards.length === 0 ? (
         <Card>

@@ -48,7 +48,7 @@ interface CelebrateOptions {
 const CelebrateContext = createContext<(o: CelebrateOptions) => void>(() => {});
 export const useCelebrate = () => useContext(CelebrateContext);
 
-const CONFETTI_COLORS = ['#ff375f', '#ff9f0a', '#ffd60a', '#30d158', '#0a84ff', '#bf5af2'];
+const CONFETTI_COLORS = ['#ff6b1a', '#ffc83d', '#1f5fd1', '#10233f', '#ffffff', '#3b82f6'];
 
 export function CelebrationProvider({ children }: { children: ReactNode }) {
   const [current, setCurrent] = useState<(CelebrateOptions & { key: number }) | null>(null);
