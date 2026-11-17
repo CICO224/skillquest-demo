@@ -3,7 +3,7 @@ import { ChevronRight, Monitor, Smartphone } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { StarIcon } from './components/ui';
 import { Caret, prefersReducedMotion, Reveal, TiltGlare, Typewriter, useTilt } from './components/motion';
-import { DashLines, DiamondNumber, Eyebrow, SectionTag, Sparkle, Terminal } from './components/brand';
+import { DashLines, DiamondNumber, SectionTag, Sparkle, Terminal } from './components/brand';
 import { ThemeToggle } from './lib/theme';
 import { hrefFor } from './lib/router';
 import { cx } from './lib/utils';
@@ -77,10 +77,7 @@ export function Landing() {
         <DashLines className="absolute top-24 -left-6 hidden w-48 text-accent/25 lg:flex" />
         <DashLines className="absolute top-[340px] -right-6 hidden w-56 text-accent/25 lg:flex" rows={4} />
 
-        <div className="animate-rise">
-          <Eyebrow>Family quest board · Ages 8–15</Eyebrow>
-        </div>
-        <h1 className="mx-auto mt-5 max-w-4xl font-display text-[58px] leading-[0.95] tracking-[0.01em] uppercase sm:text-[104px]">
+        <h1 className="mx-auto max-w-4xl font-display text-[58px] leading-[0.95] tracking-[0.01em] uppercase sm:text-[104px]">
           <span className="block overflow-hidden pb-1">
             <span className="block animate-mask-up text-ink [animation-delay:80ms]">Turn chores</span>
           </span>
