@@ -1,5 +1,3 @@
-<img src="assets/icon.svg" width="64" height="64" alt="">
-
 # SKILLQuest
 
 Parents turn chores into quests. Teens (8–15) earn **Points** by sending one photo as proof, then spend them on real-life rewards that parents hand over themselves.
