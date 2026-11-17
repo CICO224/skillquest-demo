@@ -20,7 +20,7 @@ export function ClaimsTab({ onShop }: { onShop: () => void }) {
           </div>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="stagger space-y-3">
           {claims.map((c) => (
             <Card as="article" key={c.id} className="flex items-center gap-4 p-4">
               <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-canvas text-[30px]" aria-hidden>

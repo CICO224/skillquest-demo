@@ -18,9 +18,9 @@ type Variant = 'primary' | 'success' | 'danger' | 'secondary' | 'plain' | 'dark'
 type Size = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-accent text-white hover:bg-accent-hover',
-  success: 'bg-ok text-white hover:brightness-110',
-  danger: 'bg-bad text-white hover:brightness-110',
+  primary: 'shine bg-accent text-white hover:bg-accent-hover',
+  success: 'shine bg-ok text-white hover:brightness-110',
+  danger: 'shine bg-bad text-white hover:brightness-110',
   secondary: 'bg-fill text-ink hover:bg-fill-2',
   plain: 'text-accent hover:bg-accent/10',
   dark: "bg-[#1d1d1f] text-white hover:bg-black dark:bg-raised",
@@ -83,7 +83,7 @@ export function Pill({ tone = 'gray', children, className }: { tone?: Tone; chil
 }
 
 export function MissedBadge() {
-  return <Pill tone="missed">Missed</Pill>;
+  return <Pill tone="missed" className="animate-ping-soft">Missed</Pill>;
 }
 
 /* ---------- Segmented control ---------- */

@@ -87,7 +87,12 @@ export function ParentApp() {
         {/* Sidebar */}
         <aside className="md:w-60 md:shrink-0">
           <nav aria-label="Parent sections" className="md:sticky md:top-24">
-            <ul className="flex gap-2 overflow-x-auto pb-1 md:flex-col md:gap-1 md:overflow-visible">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 hidden h-12 rounded-2xl bg-accent shadow-card transition-transform duration-500 ease-[cubic-bezier(0.3,1.25,0.5,1)] md:block"
+              style={{ transform: `translateY(${nav.findIndex((n) => n.id === section) * 52}px)` }}
+            />
+            <ul className="relative flex gap-2 overflow-x-auto pb-1 md:flex-col md:gap-1 md:overflow-visible">
               {nav.map((item) => {
                 const active = section === item.id;
                 return (
@@ -99,10 +104,10 @@ export function ParentApp() {
                       className={cx(
                         'flex h-12 w-full items-center gap-3 rounded-2xl px-4 text-left text-[15px] font-medium transition',
                         'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30',
-                        active ? 'bg-accent text-white shadow-card' : 'text-ink hover:bg-fill',
+                        active ? 'text-white max-md:bg-accent max-md:shadow-card' : 'text-ink hover:bg-fill',
                       )}
                     >
-                      <span className={active ? 'text-white' : 'text-ink-2'} aria-hidden>
+                      <span key={active ? 'on' : 'off'} className={cx(active ? 'animate-bump text-white' : 'text-ink-2')} aria-hidden>
                         {item.icon}
                       </span>
                       <span className="flex-1">{item.label}</span>

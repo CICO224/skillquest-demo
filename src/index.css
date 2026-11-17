@@ -71,8 +71,42 @@
     100% { transform: scale(1); }
   }
   @keyframes twinkle {
-    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-    50% { transform: scale(0.8) rotate(20deg); opacity: 0.7; }
+    0%, 100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: translateY(-7px) scale(0.82) rotate(20deg); opacity: 0.75; }
+  }
+
+  --animate-item: enter 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  --animate-mask-up: mask-up 0.8s cubic-bezier(0.2, 0.85, 0.2, 1) both;
+  --animate-stamp: stamp 0.7s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+  --animate-draw-x: draw-x 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-grow: grow-x 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  --animate-blink: blink 1.05s steps(1) infinite;
+  --animate-spin-slow: spin 8s linear infinite;
+  --animate-ping-soft: ping-soft 2.2s ease-out infinite;
+
+  @keyframes mask-up {
+    from { transform: translateY(105%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes stamp {
+    0% { opacity: 0; transform: scale(1.35) rotate(-7deg); }
+    60% { opacity: 1; }
+    100% { opacity: 1; transform: scale(1) rotate(-1deg); }
+  }
+  @keyframes draw-x {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes grow-x {
+    from { transform: scaleX(0); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes ping-soft {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-bad) 55%, transparent); }
+    70%, 100% { box-shadow: 0 0 0 9px transparent; }
   }
 }
 
@@ -140,6 +174,57 @@ html.theme-switching *::after {
   background: rgb(10 25 48 / 0.74);
 }
 
+/* Children cascade in one after another */
+.stagger > * { animation: var(--animate-item); }
+.stagger > *:nth-child(2) { animation-delay: 65ms; }
+.stagger > *:nth-child(3) { animation-delay: 130ms; }
+.stagger > *:nth-child(4) { animation-delay: 195ms; }
+.stagger > *:nth-child(5) { animation-delay: 260ms; }
+.stagger > *:nth-child(6) { animation-delay: 325ms; }
+.stagger > *:nth-child(7) { animation-delay: 390ms; }
+.stagger > *:nth-child(8) { animation-delay: 455ms; }
+.stagger > *:nth-child(9) { animation-delay: 520ms; }
+.stagger > *:nth-child(10) { animation-delay: 585ms; }
+.stagger > *:nth-child(11) { animation-delay: 650ms; }
+.stagger > *:nth-child(12) { animation-delay: 715ms; }
+.stagger > *:nth-child(13) { animation-delay: 780ms; }
+.stagger > *:nth-child(14) { animation-delay: 845ms; }
+
+/* Shine sweep on hover (primary buttons) */
+.shine { position: relative; overflow: hidden; isolation: isolate; }
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.32) 50%, transparent 70%);
+  transform: translateX(-130%);
+  transition: transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.shine:hover::after { transform: translateX(130%); }
+
+/* Automatic shimmer every few seconds (Premium card) */
+.shimmer { position: relative; overflow: hidden; isolation: isolate; }
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.45) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: shimmer 4.5s ease-in-out 1.5s infinite;
+  pointer-events: none;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-130%); }
+  30%, 100% { transform: translateX(130%); }
+}
+
+/* Drifting dashed lines */
+.dash-drift { animation: dash-drift 2.4s linear infinite; }
+@keyframes dash-drift {
+  to { background-position-x: 26px; }
+}
+
 /* Celebration: confetti and a self-drawing checkmark */
 .confetti-piece {
   position: absolute;
@@ -172,4 +257,5 @@ html.theme-switching *::after {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+  .shine::after, .shimmer::after { display: none; }
 }

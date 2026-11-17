@@ -22,13 +22,13 @@ export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
           <EmptyState icon={<Gift className="size-7" />} title="The shop is empty" body="Ask your parent to add some rewards." />
         </Card>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="stagger grid grid-cols-2 gap-3">
           {rewards.map((r) => {
             const missing = r.cost - points;
             const locked = missing > 0;
             const progress = Math.min(100, Math.round((points / r.cost) * 100));
             return (
-              <Card as="article" key={r.id} className="flex flex-col p-4">
+              <Card as="article" key={r.id} className="flex flex-col p-4 transition duration-300 hover:-translate-y-1 hover:shadow-lift">
                 <span className="flex aspect-square w-full items-center justify-center rounded-2xl bg-canvas text-[52px]" aria-hidden>
                   {r.icon}
                 </span>
@@ -38,7 +38,7 @@ export function ShopTab({ onClaimed }: { onClaimed: () => void }) {
                   {locked ? (
                     <div>
                       <div className="mb-2 h-1.5 overflow-hidden rounded-full bg-fill" aria-hidden>
-                        <div className="h-full rounded-full bg-star" style={{ width: `${progress}%` }} />
+                        <div className="h-full origin-left animate-grow rounded-full bg-star [animation-delay:300ms]" style={{ width: `${progress}%` }} />
                       </div>
                       <p className="flex items-start gap-1.5 rounded-xl bg-fill px-2.5 py-2 text-[13px] leading-snug font-semibold text-ink-2">
                         <Lock className="mt-px size-4 shrink-0" aria-hidden />

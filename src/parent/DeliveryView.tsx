@@ -29,7 +29,7 @@ export function DeliveryView() {
         </Card>
       ) : (
         <Card className="overflow-hidden">
-          <ul className="divide-y divide-separator">
+          <ul className="stagger divide-y divide-separator">
             {waiting.map((c) => (
               <Collapse as="li" key={c.id} leaving={isLeaving(c.id)}>
               <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center">
@@ -72,7 +72,7 @@ export function DeliveryView() {
           <EmptyState icon={<Gift className="size-7" />} title="The shop is empty" body="Add rewards your teen can save points for." />
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="stagger grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {state.rewards.map((r) => (
             <Card key={r.id} className="flex items-center gap-4 p-5">
               <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-canvas text-[30px]" aria-hidden>
@@ -102,7 +102,7 @@ export function DeliveryView() {
         <>
           <SectionTitle>Already handed over</SectionTitle>
           <Card className="overflow-hidden">
-            <ul className="divide-y divide-separator">
+            <ul className="stagger divide-y divide-separator">
               {delivered.map((c) => (
                 <li key={c.id} className="flex items-center gap-4 px-5 py-4">
                   <span className="text-[22px]" aria-hidden>

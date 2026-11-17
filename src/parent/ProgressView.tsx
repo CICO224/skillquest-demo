@@ -19,7 +19,7 @@ export function ProgressView() {
     <div>
       <PageHeader title="Teen Progress" subtitle={`How ${teen.name} is doing. Only their own progress, never compared to anyone else.`} />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="stagger grid gap-4 sm:grid-cols-3">
         <Stat icon={<StarIcon className="size-6 text-star" />} label="Points balance" value={teen.points} />
         <Stat icon={<CheckCircle2 className="size-6 text-ok" />} label="Quests completed" value={teen.questsCompleted} />
         <Stat icon={<Gift className="size-6 text-purple-600" />} label="Rewards delivered" value={teen.rewardsDelivered} />
@@ -30,7 +30,7 @@ export function ProgressView() {
         {recent.length === 0 ? (
           <EmptyState icon={<Sparkles className="size-7" />} title="No approvals yet" body="Approved quests will be listed here." />
         ) : (
-          <ul className="divide-y divide-separator">
+          <ul className="stagger divide-y divide-separator">
             {recent.map((q) => (
               <li key={q.id} className="flex items-center gap-4 px-5 py-4">
                 <CategoryIcon category={q.category} />

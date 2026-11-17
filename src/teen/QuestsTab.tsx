@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Camera, CheckCircle2, ChevronRight, MessageCircleWarning, PartyPopper, RefreshCw, Send } from 'lucide-react';
 import { Button, Card, EmptyState, MissedBadge, Modal, Pill, PointsLabel } from '../components/ui';
 import { useCelebrate } from '../components/motion';
@@ -57,7 +57,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
   };
 
   return (
-    <div>
+    <div className="stagger">
       <LargeTitle eyebrow="Quest board" subtitle={todoCount ? `${todoCount} ${todoCount === 1 ? 'quest' : 'quests'} left to do` : 'Everything is sent. Nice work!'}>
         Today’s Quests
       </LargeTitle>
@@ -78,7 +78,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
         return (
           <section key={cat} className="mb-6">
             <GroupTitle>{cat}</GroupTitle>
-            <div className="space-y-3">
+            <div className="stagger space-y-3">
               {list.map((q) => (
                 <QuestCard key={q.id} quest={q} onPhoto={() => pickPhoto(q)} busy={busy && target?.id === q.id} />
               ))}
@@ -91,7 +91,7 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
         <section className="mt-8">
           <GroupTitle>Done</GroupTitle>
           <Card className="overflow-hidden">
-            <ul className="divide-y divide-separator">
+            <ul className="stagger divide-y divide-separator">
               {done.map((q) => (
                 <li key={q.id} className="flex items-center gap-3 px-4 py-3">
                   <CheckCircle2 className="size-6 shrink-0 text-ok" aria-hidden />
@@ -139,6 +139,11 @@ export function QuestsTab({ onShop }: { onShop: () => void }) {
 function GoalCard({ onShop }: { onShop: () => void }) {
   const { state } = useStore();
   const points = state.teen.points;
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
   if (state.rewards.length === 0) return null;
 
   const locked = state.rewards.filter((r) => r.cost > points).sort((a, b) => a.cost - b.cost);
@@ -165,8 +170,8 @@ function GoalCard({ onShop }: { onShop: () => void }) {
             strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray={circ}
-            strokeDashoffset={circ * (1 - progress)}
-            className="transition-[stroke-dashoffset] duration-1000 ease-out"
+            strokeDashoffset={circ * (1 - (ready ? progress : 0))}
+            className="transition-[stroke-dashoffset] delay-300 duration-[1400ms] ease-[cubic-bezier(0.2,0.8,0.2,1)]"
           />
         </svg>
         <span className="text-[26px]" aria-hidden>
@@ -193,7 +198,7 @@ function GoalCard({ onShop }: { onShop: () => void }) {
 function QuestCard({ quest: q, onPhoto, busy }: { quest: Quest; onPhoto: () => void; busy: boolean }) {
   const missed = isMissed(q);
   return (
-    <Card as="article" className={cx('p-4', missed && 'ring-2 ring-bad/60')}>
+    <Card as="article" className={cx('p-4 transition duration-300 hover:-translate-y-0.5 hover:shadow-lift', missed && 'ring-2 ring-bad/60')}>
       <div className="flex items-start gap-3">
         <CategoryIcon category={q.category} size="lg" />
         <div className="min-w-0 flex-1">

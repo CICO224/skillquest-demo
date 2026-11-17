@@ -28,7 +28,7 @@ export function ReviewView() {
           <EmptyState icon={<Inbox className="size-7" />} title="You’re all caught up" body="New photos from your teen will show up here." />
         </Card>
       ) : (
-        <div className="space-y-5">
+        <div className="stagger space-y-5">
           {pending.map((q) => {
             const missed = isMissed(q);
             return (

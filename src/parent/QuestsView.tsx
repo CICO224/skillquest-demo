@@ -41,7 +41,7 @@ export function QuestsView({ onUpgrade, onNavigate }: { onUpgrade: () => void; o
       />
 
       {/* Summary widgets */}
-      <div className="mb-8 grid grid-cols-2 gap-3 xl:grid-cols-4">
+      <div className="stagger mb-8 grid grid-cols-2 gap-3 xl:grid-cols-4">
         <Widget
           onClick={() => onNavigate('review')}
           icon={<ImageUp className="size-5" />}
@@ -105,7 +105,7 @@ export function QuestsView({ onUpgrade, onNavigate }: { onUpgrade: () => void; o
         </Card>
       ) : (
         <Card as="section" className="overflow-hidden">
-          <ul className="divide-y divide-separator">
+          <ul className="stagger divide-y divide-separator">
             {active.map((q) => (
               <QuestRow key={q.id} quest={q} leaving={isLeaving(q.id)} onDelete={() => setConfirmDelete(q)} />
             ))}
@@ -117,7 +117,7 @@ export function QuestsView({ onUpgrade, onNavigate }: { onUpgrade: () => void; o
         <>
           <SectionTitle>Recently completed</SectionTitle>
           <Card className="overflow-hidden">
-            <ul className="divide-y divide-separator">
+            <ul className="stagger divide-y divide-separator">
               {done.map((q) => (
                 <li key={q.id} className="flex items-center gap-4 px-5 py-4">
                   <CategoryIcon category={q.category} />

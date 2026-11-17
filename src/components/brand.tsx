@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cx } from '../lib/utils';
+import { useInView } from './motion';
 
 /** Four-point sparkle from the banner. */
 export function Sparkle({ className, twinkle }: { className?: string; twinkle?: boolean }) {
@@ -22,15 +23,32 @@ export function Emblem({ className }: { className?: string }) {
 
 /** Orange "LABEL" tab with a thin rule ending in a diamond. */
 export function SectionTag({ children, className, rule = true }: { children: ReactNode; className?: string; rule?: boolean }) {
+  const [ref, shown] = useInView<HTMLDivElement>(0.4);
   return (
-    <div className={cx('flex items-center gap-3', className)}>
-      <span className="inline-flex items-center rounded-lg bg-tangerine px-3 py-1.5 font-mono text-[13px] font-bold tracking-wider text-white uppercase shadow-[3px_3px_0_var(--color-navy)] dark:shadow-[3px_3px_0_rgb(0_0_0/0.4)]">
+    <div ref={ref} className={cx('flex items-center gap-3', className)}>
+      <span
+        className={cx(
+          'inline-flex items-center rounded-lg bg-tangerine px-3 py-1.5 font-mono text-[13px] font-bold tracking-wider text-white uppercase',
+          'shadow-[3px_3px_0_var(--color-navy)] transition-[opacity,translate,rotate] duration-700 ease-[cubic-bezier(0.3,1.4,0.5,1)] dark:shadow-[3px_3px_0_rgb(0_0_0/0.4)]',
+          shown ? 'translate-x-0 rotate-0 opacity-100' : '-translate-x-6 -rotate-3 opacity-0',
+        )}
+      >
         {children}
       </span>
       {rule && (
         <span className="flex flex-1 items-center" aria-hidden>
-          <span className="h-px flex-1 bg-ink/15" />
-          <span className="size-2 rotate-45 bg-ink" />
+          <span
+            className={cx(
+              'h-px flex-1 origin-left bg-ink/15 transition-transform delay-200 duration-1000 ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+              shown ? 'scale-x-100' : 'scale-x-0',
+            )}
+          />
+          <span
+            className={cx(
+              'size-2 bg-ink transition-[opacity,rotate,scale] delay-700 duration-500',
+              shown ? 'rotate-45 scale-100 opacity-100' : 'rotate-[225deg] scale-0 opacity-0',
+            )}
+          />
         </span>
       )}
     </div>
@@ -86,7 +104,7 @@ export function DashLines({ className, rows = 3 }: { className?: string; rows?: 
       {Array.from({ length: rows }, (_, i) => (
         <span
           key={i}
-          className="h-[3px] rounded-full"
+          className="dash-drift h-[3px] rounded-full"
           style={{
             backgroundImage: 'repeating-linear-gradient(90deg, currentColor 0 18px, transparent 18px 26px)',
             marginLeft: `${i * 14}px`,

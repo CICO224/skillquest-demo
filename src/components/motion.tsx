@@ -173,43 +173,173 @@ export function Collapse({
   );
 }
 
-/* ---------- Scroll reveal (landing page) ---------- */
+/* ---------- In-view detection ---------- */
 
-export function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
-
+export function useInView<T extends HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T>(null);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
-      setShown(true);
+      setInView(true);
       return;
     }
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShown(true);
+          setInView(true);
           io.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+      { threshold, rootMargin: '0px 0px -40px 0px' },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [threshold]);
+  return [ref, inView] as const;
+}
 
+/* ---------- Scroll reveal ---------- */
+
+type RevealVariant = 'up' | 'pop' | 'left' | 'right' | 'zoom';
+const HIDDEN: Record<RevealVariant, string> = {
+  up: 'translate-y-8 opacity-0',
+  pop: 'scale-50 -rotate-45 opacity-0',
+  left: '-translate-x-8 opacity-0',
+  right: 'translate-x-6 opacity-0',
+  zoom: 'scale-90 opacity-0',
+};
+
+export function Reveal({
+  children,
+  className,
+  delay = 0,
+  variant = 'up',
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  variant?: RevealVariant;
+}) {
+  const [ref, shown] = useInView<HTMLDivElement>(0.12);
   return (
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={cx(
-        'transition-[opacity,translate] duration-[900ms] ease-[cubic-bezier(0.2,0.8,0.2,1)]',
-        shown ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0',
+        'transition-[opacity,translate,scale,rotate] duration-[900ms] ease-[cubic-bezier(0.2,0.8,0.2,1)]',
+        variant === 'pop' && 'duration-[700ms] ease-[cubic-bezier(0.3,1.5,0.5,1)]',
+        shown ? 'translate-x-0 translate-y-0 scale-100 rotate-0 opacity-100' : HIDDEN[variant],
         className,
       )}
     >
       {children}
     </div>
+  );
+}
+
+/* ---------- Typewriter ---------- */
+
+export interface TypeSegment {
+  text: string;
+  className?: string;
+}
+
+/** Types out lines of text once visible. Screen readers get the full text immediately. */
+export function Typewriter({ lines, speed = 32, startDelay = 500 }: { lines: TypeSegment[][]; speed?: number; startDelay?: number }) {
+  const total = lines.reduce((n, line) => n + line.reduce((m, seg) => m + seg.text.length, 0), 0);
+  const [ref, inView] = useInView<HTMLSpanElement>(0.3);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (prefersReducedMotion()) {
+      setCount(total);
+      return;
+    }
+    let n = 0;
+    let timer = 0;
+    const tick = () => {
+      n += 1;
+      setCount(n);
+      if (n < total) timer = window.setTimeout(tick, speed + Math.random() * 30);
+    };
+    timer = window.setTimeout(tick, startDelay);
+    return () => window.clearTimeout(timer);
+  }, [inView, total, speed, startDelay]);
+
+  let remaining = count;
+  let cursorPlaced = false;
+  const done = count >= total;
+
+  return (
+    <span ref={ref}>
+      <span className="sr-only">{lines.map((l) => l.map((s) => s.text).join('')).join(' ')}</span>
+      <span aria-hidden>
+        {lines.map((line, li) => (
+          <span key={li} className="block">
+            {line.map((seg, si) => {
+              const shown = Math.max(0, Math.min(seg.text.length, remaining));
+              remaining -= seg.text.length;
+              const needsCursor = !cursorPlaced && shown < seg.text.length;
+              if (needsCursor) cursorPlaced = true;
+              return (
+                <span key={si} className={seg.className}>
+                  {seg.text.slice(0, shown)}
+                  {needsCursor && <Caret />}
+                  <span className="invisible">{seg.text.slice(shown)}</span>
+                </span>
+              );
+            })}
+            {done && li === lines.length - 1 && <Caret />}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+export function Caret() {
+  return <span className="ml-px inline-block h-[1.05em] w-[0.55em] translate-y-[0.18em] animate-blink bg-tangerine align-baseline" aria-hidden />;
+}
+
+/* ---------- 3D tilt toward the pointer ---------- */
+
+export function useTilt<T extends HTMLElement>(max = 6) {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReducedMotion()) return;
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      el.style.transform = `perspective(900px) rotateX(${(0.5 - y) * max}deg) rotateY(${(x - 0.5) * max}deg)`;
+      el.style.setProperty('--mx', `${x * 100}%`);
+      el.style.setProperty('--my', `${y * 100}%`);
+    };
+    const leave = () => {
+      el.style.transform = '';
+    };
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerleave', leave);
+    return () => {
+      el.removeEventListener('pointermove', move);
+      el.removeEventListener('pointerleave', leave);
+    };
+  }, [max]);
+  return ref;
+}
+
+/** Soft light that follows the pointer inside a tilt card. */
+export function TiltGlare() {
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      style={{ background: 'radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.16), transparent 45%)' }}
+    />
   );
 }

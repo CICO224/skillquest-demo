@@ -103,7 +103,13 @@ export function TeenApp() {
 
         {/* Tab bar */}
         <nav aria-label="Teen sections" className="glass fixed inset-x-0 bottom-0 z-30 border-t border-separator">
-          <ul className="mx-auto flex max-w-md px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),8px)]">
+          <div className="relative mx-auto max-w-md">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute top-1 left-2 h-[54px] w-[calc((100%-16px)/3)] rounded-2xl bg-accent/10 transition-transform duration-500 ease-[cubic-bezier(0.3,1.25,0.5,1)]"
+            style={{ transform: `translateX(${tabs.findIndex((t) => t.id === tab) * 100}%)` }}
+          />
+          <ul className="relative flex px-2 pt-1.5 pb-[max(env(safe-area-inset-bottom),8px)]">
             {tabs.map(({ id, label, Icon }) => {
               const active = tab === id;
               const waiting = id === 'claims' ? state.claims.filter((c) => !c.isDelivered).length : 0;
@@ -119,7 +125,9 @@ export function TeenApp() {
                       active ? 'text-accent' : 'text-ink-3',
                     )}
                   >
-                    <Icon active={active} />
+                    <span key={active ? 'on' : 'off'} className={active ? 'animate-bump' : undefined}>
+                      <Icon active={active} />
+                    </span>
                     {label}
                     {waiting > 0 && (
                       <span className="absolute top-0.5 left-1/2 ml-2 min-w-[18px] rounded-full bg-bad px-1 text-[11px] leading-[18px] font-semibold text-white">
@@ -131,6 +139,7 @@ export function TeenApp() {
               );
             })}
           </ul>
+          </div>
         </nav>
       </div>
     </div>
