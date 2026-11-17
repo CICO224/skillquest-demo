@@ -11,13 +11,10 @@ export function LargeTitle({ children, subtitle, eyebrow }: { children: ReactNod
   );
 }
 
-/** Mono "// CATEGORY" heading used for groups in the teen view. */
+/** Mono "CATEGORY" heading used for groups in the teen view. */
 export function GroupTitle({ children }: { children: ReactNode }) {
   return (
     <h2 className="mb-2 px-1 font-mono text-[13px] font-bold tracking-[0.1em] text-ink-2 uppercase">
-      <span className="text-tangerine" aria-hidden>
-        //{' '}
-      </span>
       {children}
     </h2>
   );

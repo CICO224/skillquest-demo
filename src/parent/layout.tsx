@@ -27,9 +27,6 @@ export function PageHeader({
 export function SectionTitle({ children }: { children: ReactNode }) {
   return (
     <h2 className="mt-10 mb-3 px-1 font-mono text-[13px] font-bold tracking-[0.1em] text-ink-2 uppercase">
-      <span className="text-tangerine" aria-hidden>
-        //{' '}
-      </span>
       {children}
     </h2>
   );

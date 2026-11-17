@@ -153,19 +153,19 @@ export function Landing() {
             <Terminal title="simple_rules.txt" className="mt-8">
               <ul className="space-y-3">
                 <Rule>
-                  <b className="text-sun">One currency only: points.</b> No XP, no levels.
+                  <b className="text-accent dark:text-sun">One currency only: points.</b> No XP, no levels.
                 </Rule>
                 <Rule>
-                  Points are only added after you <b className="text-sun">approve the photo</b>.
+                  Points are only added after you <b className="text-accent dark:text-sun">approve the photo</b>.
                 </Rule>
                 <Rule tone="red">
                   Missed a deadline? The quest turns red and says <b>“MISSED”</b>.
                 </Rule>
                 <Rule>
-                  <b className="text-sun">No leaderboards.</b> Kids only see their <b className="text-sun">own progress</b>.
+                  <b className="text-accent dark:text-sun">No leaderboards.</b> Kids only see their <b className="text-accent dark:text-sun">own progress</b>.
                 </Rule>
                 <Rule>
-                  Connect your kid in seconds: click your <b className="text-sun">profile picture</b> to show a <b className="text-sun">QR code</b> for them
+                  Connect your kid in seconds: click your <b className="text-accent dark:text-sun">profile picture</b> to show a <b className="text-accent dark:text-sun">QR code</b> for them
                   to scan.
                 </Rule>
               </ul>
@@ -184,13 +184,13 @@ export function Landing() {
             <Reveal>
               <a
                 href={hrefFor('parent')}
-                className="group relative block h-full overflow-hidden rounded-[32px] bg-navy p-10 text-cream ring-1 ring-white/5 transition hover:-translate-y-1"
+                className="group relative block h-full overflow-hidden rounded-[32px] bg-surface p-10 text-ink shadow-card ring-1 ring-ink/10 dark:bg-navy dark:text-cream dark:shadow-none dark:ring-white/5 transition hover:-translate-y-1"
               >
-                <Sparkle className="absolute top-8 right-8 size-8 text-sun" />
-                <Monitor className="size-8 text-cream/70" aria-hidden />
+                <Sparkle twinkle className="absolute top-8 right-8 size-8 text-tangerine dark:text-sun" />
+                <Monitor className="size-8 text-ink-3 dark:text-cream/70" aria-hidden />
                 <h3 className="mt-6 font-display text-[44px] leading-none tracking-[0.01em] uppercase">For Parents</h3>
-                <p className="mt-4 text-[17px] text-cream/75">A calm desktop dashboard. One job per screen, clear words on every button.</p>
-                <span className="mt-8 inline-flex items-center gap-1 text-[17px] font-medium text-sun group-hover:underline">
+                <p className="mt-4 text-[17px] text-ink-2 dark:text-cream/75">A calm desktop dashboard. One job per screen, clear words on every button.</p>
+                <span className="mt-8 inline-flex items-center gap-1 text-[17px] font-medium text-accent group-hover:underline dark:text-sun">
                   Open Parent Dashboard <ChevronRight className="size-4" aria-hidden />
                 </span>
               </a>
@@ -269,8 +269,8 @@ export function Landing() {
 
 function Rule({ children, tone }: { children: ReactNode; tone?: 'red' }) {
   return (
-    <li className={cx('flex gap-3', tone === 'red' && 'text-[#ff8a80]')}>
-      <Sparkle className={cx('mt-1.5 size-3.5 shrink-0', tone === 'red' ? 'text-[#ff8a80]' : 'text-sun')} />
+    <li className={cx('flex gap-3', tone === 'red' && 'text-bad dark:text-[#ff8a80]')}>
+      <Sparkle className={cx('mt-1.5 size-3.5 shrink-0', tone === 'red' ? 'text-bad dark:text-[#ff8a80]' : 'text-tangerine dark:text-sun')} />
       <span>{children}</span>
     </li>
   );

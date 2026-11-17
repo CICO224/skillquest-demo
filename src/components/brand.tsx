@@ -20,12 +20,11 @@ export function Emblem({ className }: { className?: string }) {
   );
 }
 
-/** Orange "// LABEL" tab with a thin rule ending in a diamond. */
+/** Orange "LABEL" tab with a thin rule ending in a diamond. */
 export function SectionTag({ children, className, rule = true }: { children: ReactNode; className?: string; rule?: boolean }) {
   return (
     <div className={cx('flex items-center gap-3', className)}>
-      <span className="inline-flex items-center gap-2 rounded-lg bg-tangerine px-3 py-1.5 font-mono text-[13px] font-bold tracking-wider text-white uppercase shadow-[3px_3px_0_var(--color-navy)] dark:shadow-[3px_3px_0_rgb(0_0_0/0.4)]">
-        <span aria-hidden>//</span>
+      <span className="inline-flex items-center rounded-lg bg-tangerine px-3 py-1.5 font-mono text-[13px] font-bold tracking-wider text-white uppercase shadow-[3px_3px_0_var(--color-navy)] dark:shadow-[3px_3px_0_rgb(0_0_0/0.4)]">
         {children}
       </span>
       {rule && (
@@ -38,11 +37,10 @@ export function SectionTag({ children, className, rule = true }: { children: Rea
   );
 }
 
-/** Small mono eyebrow, e.g. "// PARENT DASHBOARD". */
+/** Small mono eyebrow, e.g. "PARENT DASHBOARD". */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <p className={cx('font-mono text-[12px] font-bold tracking-[0.14em] text-tangerine uppercase', className)}>
-      <span aria-hidden>// </span>
       {children}
     </p>
   );
@@ -67,12 +65,12 @@ export function DiamondNumber({ n, tone = 'orange', className }: { n: number; to
 /** Navy terminal window from the banner, e.g. "simple_rules.txt". */
 export function Terminal({ title, children, className }: { title: string; children: ReactNode; className?: string }) {
   return (
-    <div className={cx('overflow-hidden rounded-3xl bg-navy text-cream shadow-lift ring-1 ring-white/5', className)}>
+    <div className={cx('overflow-hidden rounded-3xl bg-surface text-ink shadow-card ring-1 ring-ink/10 dark:bg-navy dark:text-cream dark:shadow-lift dark:ring-white/5', className)}>
       <div className="flex items-center gap-3 bg-accent px-5 py-3">
         <span className="flex gap-1.5" aria-hidden>
           <span className="size-3 rounded-full bg-tangerine" />
           <span className="size-3 rounded-full bg-sun" />
-          <span className="size-3 rounded-full bg-white" />
+          <span className="size-3 rounded-full bg-white/90" />
         </span>
         <span className="font-mono text-[14px] font-bold text-white">{title}</span>
       </div>
